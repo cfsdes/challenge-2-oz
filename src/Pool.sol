@@ -30,7 +30,7 @@ contract Pool is ReentrancyGuard {
         token = _token;
     }
 
-    //@audit-issue os comentários estão invertidos. X é o ether e Y é o token
+    //@audit-issue comments are inconsistents. X is ether and Y is the token.
     /**
      * This function gets the current reserves of the tokens held by the contract.
      * @return x is the amount of the ERC-20 token and y is the amount of ETH.
