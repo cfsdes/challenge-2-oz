@@ -1,0 +1,11 @@
+output: mythx.json
+format: json
+
+analyze:
+    mode: deep
+    create-group: false
+    solc: 0.8.2
+    remappings:
+        - "@openzeppelin/=lib/openzeppelin-contracts/"
+    targets:
+        - "src/"

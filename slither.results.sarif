@@ -1,0 +1,209 @@
+{
+  "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "Slither",
+          "informationUri": "https://github.com/crytic/slither",
+          "version": "0.10.0",
+          "rules": [
+            {
+              "id": "0-1-arbitrary-send-eth",
+              "name": "arbitrary-send-eth",
+              "properties": {
+                "precision": "high",
+                "security-severity": "8.0"
+              },
+              "shortDescription": {
+                "text": "Functions that send Ether to arbitrary destinations"
+              },
+              "help": {
+                "text": "Ensure that an arbitrary user cannot withdraw unauthorized funds."
+              }
+            },
+            {
+              "id": "3-0-solc-version",
+              "name": "solc-version",
+              "properties": {
+                "precision": "very-high",
+                "security-severity": "0.0"
+              },
+              "shortDescription": {
+                "text": "Incorrect versions of Solidity"
+              },
+              "help": {
+                "text": "\nDeploy with any of the following Solidity versions:\n- 0.8.18\n\nThe recommendations take into account:\n- Risks related to recent releases\n- Risks of complex code generation changes\n- Risks of new language features\n- Risks of known bugs\n\nUse a simple pragma version that allows any of these versions.\nConsider using the latest version of Solidity for testing."
+              }
+            },
+            {
+              "id": "3-0-low-level-calls",
+              "name": "low-level-calls",
+              "properties": {
+                "precision": "very-high",
+                "security-severity": "0.0"
+              },
+              "shortDescription": {
+                "text": "Low-level calls"
+              },
+              "help": {
+                "text": "Avoid low-level calls. Check the call success. If the call is meant for a contract, check for code existence."
+              }
+            },
+            {
+              "id": "3-0-naming-convention",
+              "name": "naming-convention",
+              "properties": {
+                "precision": "very-high",
+                "security-severity": "0.0"
+              },
+              "shortDescription": {
+                "text": "Conformance to Solidity naming conventions"
+              },
+              "help": {
+                "text": "Follow the Solidity [naming convention](https://solidity.readthedocs.io/en/v0.4.25/style-guide.html#naming-conventions)."
+              }
+            },
+            {
+              "id": "4-0-immutable-states",
+              "name": "immutable-states",
+              "properties": {
+                "precision": "very-high",
+                "security-severity": "0.0"
+              },
+              "shortDescription": {
+                "text": "State variables that could be declared immutable"
+              },
+              "help": {
+                "text": "Add the `immutable` attribute to state variables that never change or are set only in the constructor."
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "0-1-arbitrary-send-eth",
+          "message": {
+            "text": "Pool.swapTokenForEth(uint256) (src/Pool.sol#75-96) sends eth to arbitrary user\n\tDangerous calls:\n\t- (sent) = msg.sender.call{value: alpha}() (src/Pool.sol#86)\n",
+            "markdown": "[Pool.swapTokenForEth(uint256)](src/Pool.sol#L75-L96) sends eth to arbitrary user\n\tDangerous calls:\n\t- [(sent) = msg.sender.call{value: alpha}()](src/Pool.sol#L86)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Pool.sol"
+                },
+                "region": {
+                  "startLine": 75,
+                  "endLine": 96
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "3bc96d6e5d4d2c78c70e569b2132769c7d50969a45683e011c87095e5add11e5"
+          }
+        },
+        {
+          "ruleId": "3-0-solc-version",
+          "message": {
+            "text": "Pragma version0.8.2 (src/Pool.sol#1) allows old versions\n",
+            "markdown": "Pragma version[0.8.2](src/Pool.sol#L1) allows old versions\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Pool.sol"
+                },
+                "region": {
+                  "startLine": 1,
+                  "endLine": 1
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "d47807c20c24b056979bd819c850e88d326bf1a87b67fc8fd450dfa4368d6b0c"
+          }
+        },
+        {
+          "ruleId": "3-0-low-level-calls",
+          "message": {
+            "text": "Low level call in Pool.swapTokenForEth(uint256) (src/Pool.sol#75-96):\n\t- (sent) = msg.sender.call{value: alpha}() (src/Pool.sol#86)\n",
+            "markdown": "Low level call in [Pool.swapTokenForEth(uint256)](src/Pool.sol#L75-L96):\n\t- [(sent) = msg.sender.call{value: alpha}()](src/Pool.sol#L86)\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Pool.sol"
+                },
+                "region": {
+                  "startLine": 75,
+                  "endLine": 96
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "2cd609086c02ff5780d2209dfd07016c7bc20beb9170186ab8e10e860ec2747e"
+          }
+        },
+        {
+          "ruleId": "3-0-naming-convention",
+          "message": {
+            "text": "Parameter Pool.swapTokenForEth(uint256)._amount (src/Pool.sol#75) is not in mixedCase\n",
+            "markdown": "Parameter [Pool.swapTokenForEth(uint256)._amount](src/Pool.sol#L75) is not in mixedCase\n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Pool.sol"
+                },
+                "region": {
+                  "startLine": 75,
+                  "endLine": 75
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "e9b86202187a2ba505785cc4f048ab3e9c23249d5ca513aa7099188bd8277672"
+          }
+        },
+        {
+          "ruleId": "4-0-immutable-states",
+          "message": {
+            "text": "Pool.token (src/Pool.sol#21) should be immutable \n",
+            "markdown": "[Pool.token](src/Pool.sol#L21) should be immutable \n"
+          },
+          "level": "warning",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Pool.sol"
+                },
+                "region": {
+                  "startLine": 21,
+                  "endLine": 21
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "id": "57ae83a045195151ea4c49c0266f6364a3ae2c8e1787711df2913ebf73604be2"
+          }
+        }
+      ]
+    }
+  ]
+}
