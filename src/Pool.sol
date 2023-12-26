@@ -66,7 +66,7 @@ contract Pool is ReentrancyGuard {
 
         token.safeTransfer(msg.sender, beta);
 
-        //@audit-issue uso inadequado do evento. O certo seria:
+        //@audit-issue wrong usage of Swap event.
         // Swap(sender, xIn, yIn, xOut, yOut);
         // Swap(msg.sender, msg.value, 0, 0, beta);
         emit Swap(msg.sender, 0, msg.value, beta, 0);
@@ -93,7 +93,7 @@ contract Pool is ReentrancyGuard {
         // @audit-issue state is modified after the external call. read-only reentrancy
         token.safeTransferFrom(msg.sender, address(this), _amount);
 
-        //@audit-issue o evento está sendo usado errado. o certo seria:
+        //@audit-issue wrong usage of Swap event.
         // Swap(sender, xIn, yIn, xOut, yOut);
         // Swap(msg.sender, 0, _amount, alpha, 0);
         emit Swap(msg.sender, _amount, 0, 0, alpha);
