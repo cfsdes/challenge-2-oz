@@ -20,3 +20,5 @@ forge install
 forge build
 forge test -vvv
 ```
+
+<img width="1093" alt="Captura de Tela 2023-12-26 às 15 11 35" src="https://github.com/cfsdes/challenge-2-oz/assets/20214824/8d87481e-b766-4f71-bc45-9b85f7698c07">
