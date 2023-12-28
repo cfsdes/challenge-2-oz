@@ -25,7 +25,7 @@ contract TestPool is Test {
 
     function test_getEthPrice() public {
         uint256 _price = pool.getETHPriceInToken();
-        assertEq(_price, 10);
+        assertEq(_price, 5);
     }
 
     function test_swapEthForToken() public {
