@@ -59,7 +59,7 @@ contract Pool is ReentrancyGuard {
         require(x > 0 && y > 0, "Insufficient pool liquidity");
 
         // Amount of the ERC-20 token to transfer to msg.sender
-        // @audit-ok formula OK. Beta are the amount of tokens that will be transfered.
+        // @audit-issue There is a problem in this formula that causes the user to lose money. X must be address(this).balance - msg.value.
         uint256 beta = msg.value * y / (x + msg.value);
         require(y > beta, "You can't drain the pool of the ERC-20 token");
         require(beta != 0, "Insufficient swap amount");

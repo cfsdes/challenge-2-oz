@@ -19,8 +19,8 @@ contract TestPool is Test {
 
     function test_getReserves() public {
         (uint256 x, uint256 y) = pool.getReserves();
-        assertEq(x, 1000);
-        assertEq(y, 10000);
+        assertEq(x, 10000);
+        assertEq(y, 50000);
     }
 
     function test_getEthPrice() public {
@@ -28,18 +28,19 @@ contract TestPool is Test {
         assertEq(_price, 10);
     }
 
-    function test_fuzz_swapEthForToken(uint96 _amount) public {
-        vm.assume(_amount != 0);
-        uint lastBalance = address(this).balance;
+    function test_swapEthForToken() public {
+        address alice = makeAddr("alice");
+        uint _amount = 1000;
+        vm.deal(alice, _amount);
         
-        // SWAP
-        pool.swapEthForToken{value: _amount}();
-        assertGt(token.balanceOf(address(this)), 0, "Token not received");
-        assertEq(address(this).balance + _amount, lastBalance, "ETH not transferred");
+        // Calculate expected amount of tokens to receive
+        (uint256 x, uint256 y) = pool.getReserves();
+        uint256 beta = _amount * y / (x + _amount);
 
-        // Check pool reserves
-        (, uint256 y) = pool.getReserves();
-        assertGt(y, 0, "Token drained");
+        // SWAP
+        vm.prank(alice);
+        pool.swapEthForToken{value: _amount}();
+        assertEq(token.balanceOf(alice), beta, "Wrong amount received");
     }
 
     function test_swapTokenForEth() public {
@@ -49,6 +50,10 @@ contract TestPool is Test {
         deal(address(token), alice, _amount);
         vm.startPrank(alice);
 
+        // Calculate expected amount of ETH to receive
+        (uint256 x, uint256 y) = pool.getReserves();
+        uint256 alpha = _amount * x / (y + _amount);
+
         // transfer without allowance
         vm.expectRevert("ERC20: insufficient allowance");
         pool.swapTokenForEth(_amount);
@@ -56,7 +61,7 @@ contract TestPool is Test {
         // transfer with allowance
         token.approve(address(pool), _amount);
         pool.swapTokenForEth(_amount);
-        assertTrue(alice.balance != 0, "ETH not received");
+        assertEq(alice.balance, alpha, "ETH not received");
     }
 
 
@@ -108,8 +113,8 @@ contract TestPool is Test {
 
     // initialize Pool
     function resetReserves() internal {
-        vm.deal(address(pool), 1000); // ETH - 1000
-        deal(address(token), address(pool), 10000); // Token - 10000
+        vm.deal(address(pool), 10000); // ETH - 10000
+        deal(address(token), address(pool), 50000); // Token - 50000
     }
 
     receive() external payable {}
